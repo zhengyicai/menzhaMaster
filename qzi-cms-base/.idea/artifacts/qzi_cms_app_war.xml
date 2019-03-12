@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="qzi-cms-app:war">
+    <output-path>$PROJECT_DIR$/qzi-cms-app/target</output-path>
+    <root id="archive" name="qzi-cms-app-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="qzi-cms-app:war exploded" />
+    </root>
+  </artifact>
+</component>

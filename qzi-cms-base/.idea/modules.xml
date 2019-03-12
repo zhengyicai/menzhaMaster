@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/qzi-cms-app/qzi-cms-app.iml" filepath="$PROJECT_DIR$/qzi-cms-app/qzi-cms-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qzi-cms-base.iml" filepath="$PROJECT_DIR$/qzi-cms-base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qzi-cms-common/qzi-cms-common.iml" filepath="$PROJECT_DIR$/qzi-cms-common/qzi-cms-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qzi-cms-server/qzi-cms-server.iml" filepath="$PROJECT_DIR$/qzi-cms-server/qzi-cms-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qzi-cms-web/qzi-cms-web.iml" filepath="$PROJECT_DIR$/qzi-cms-web/qzi-cms-web.iml" />
+    </modules>
+  </component>
+</project>
