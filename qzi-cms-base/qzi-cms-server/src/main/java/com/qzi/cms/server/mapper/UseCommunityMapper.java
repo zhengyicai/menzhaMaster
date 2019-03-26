@@ -73,4 +73,12 @@ public interface UseCommunityMapper extends BaseMapper<UseCommunityPo>{
 	@Select("SELECT uc.* from use_community uc  where uc.sysUserId=#{userId} and uc.state='10' limit 1")
 	public UseCommunityVo  findUser(@Param("userId") String  userId);
 
+
+	/**
+	 * 微信获取小区数据
+	 */
+
+	@Select("select id,communityName,state from use_community")
+	public  List<UseCommunityPo> wxFindAll();
+
 }

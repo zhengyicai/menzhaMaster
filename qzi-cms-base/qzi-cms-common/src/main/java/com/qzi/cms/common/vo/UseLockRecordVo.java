@@ -33,6 +33,15 @@ public class UseLockRecordVo {
 
     private String createTimeStr;
 
+    private String equipmentId;
+
+    public String getEquipmentId() {
+        return equipmentId;
+    }
+
+    public void setEquipmentId(String equipmentId) {
+        this.equipmentId = equipmentId;
+    }
 
     public String getCreateTimeStr() {
         return createTimeStr;

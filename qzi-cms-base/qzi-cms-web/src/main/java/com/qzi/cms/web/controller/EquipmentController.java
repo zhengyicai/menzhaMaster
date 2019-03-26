@@ -10,8 +10,13 @@ package com.qzi.cms.web.controller;
 import javax.annotation.Resource;
 
 import com.qzi.cms.common.po.UseCommunityPo;
+import com.qzi.cms.common.po.UseEquipmentNowStatePo;
+import com.qzi.cms.common.po.UseEquipmentPortPo;
+import com.qzi.cms.common.util.ToolUtils;
 import com.qzi.cms.common.vo.CommunityAdminVo;
 import com.qzi.cms.common.vo.UseLockRecordVo;
+import com.qzi.cms.server.mapper.UseEquipmentNowStateMapper;
+import com.qzi.cms.server.mapper.UseEquipmentPortMapper;
 import com.qzi.cms.server.service.web.CommunityService;
 import com.qzi.cms.server.service.web.WebLockRecordService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,6 +55,9 @@ public class EquipmentController {
 
 	@Resource
 	private WebLockRecordService webLockRecordService;
+
+
+
 
 
 	@GetMapping("/findCommunitys")
@@ -146,15 +154,25 @@ public class EquipmentController {
 		try {
 
 			//判断当前的设备号是否超过小区设定的总数
-			UseCommunityPo communityPo =  communityService.findOne(equipmentVo.getCommunityId());
-			 
-			int count = equipmentService.findCommunityCount(equipmentVo.getCommunityId());
-			 if((count+1)>  communityPo.getMasterNum()){
-				 respBody.add(RespCodeEnum.ERROR.getCode(), "设备已超出该小区设置的主机数");
-				 return respBody;
-			 }
+			//			UseCommunityPo communityPo =  communityService.findOne(equipmentVo.getCommunityId());
+			//
+			//			int count = equipmentService.findCommunityCount(equipmentVo.getCommunityId());
+			//			 if((count+1)>  communityPo.getMasterNum()){
+			//				 respBody.add(RespCodeEnum.ERROR.getCode(), "设备已超出该小区设置的主机数");
+			//				 return respBody;
+			//			 }
+
+
 
 			equipmentService.add(equipmentVo);
+
+
+
+
+
+
+
+
 			respBody.add(RespCodeEnum.SUCCESS.getCode(), "设备数据保存成功");
 		} catch (CommException ex) {
 			respBody.add(RespCodeEnum.ERROR.getCode(), "云之讯调用异常");

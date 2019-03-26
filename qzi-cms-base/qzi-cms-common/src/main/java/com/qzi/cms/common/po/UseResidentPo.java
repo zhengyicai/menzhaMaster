@@ -75,6 +75,90 @@ public class UseResidentPo implements Serializable{
 	private String state;
 
 
+	/**
+	 * 微信
+	 */
+	private String wxId;
+	/**
+	 * 人脸识别
+	 */
+	private String imgUrl;
+	/**
+	 * 指纹id
+	 */
+	private String fingerUrl;
+
+	/**
+	 * 身份证id
+	 */
+	private String identityId;
+
+	/**
+	 * 身份证No
+	 */
+	private String identityNo;
+
+	private Date lastTime;
+
+
+	private String  residentType;
+
+	public String getResidentType() {
+		return residentType;
+	}
+
+	public void setResidentType(String residentType) {
+		this.residentType = residentType;
+	}
+
+	public Date getLastTime() {
+		return lastTime;
+	}
+
+	public void setLastTime(Date lastTime) {
+		this.lastTime = lastTime;
+	}
+
+	public String getWxId() {
+		return wxId;
+	}
+
+	public void setWxId(String wxId) {
+		this.wxId = wxId;
+	}
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
+
+	public String getFingerUrl() {
+		return fingerUrl;
+	}
+
+	public void setFingerUrl(String fingerUrl) {
+		this.fingerUrl = fingerUrl;
+	}
+
+	public String getIdentityId() {
+		return identityId;
+	}
+
+	public void setIdentityId(String identityId) {
+		this.identityId = identityId;
+	}
+
+	public String getIdentityNo() {
+		return identityNo;
+	}
+
+	public void setIdentityNo(String identityNo) {
+		this.identityNo = identityNo;
+	}
+
 	public String getState() {
 		return state;
 	}

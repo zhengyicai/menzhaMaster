@@ -21,6 +21,18 @@ public class UseUserCardPo {
     private String state;
     private Date createTime;
 
+
+    private String equipmentId;
+
+
+    public String getEquipmentId() {
+        return equipmentId;
+    }
+
+    public void setEquipmentId(String equipmentId) {
+        this.equipmentId = equipmentId;
+    }
+
     public String getId() {
         return id;
     }

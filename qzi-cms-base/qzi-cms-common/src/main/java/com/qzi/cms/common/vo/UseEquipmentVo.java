@@ -29,6 +29,13 @@ public class UseEquipmentVo {
 	 * 设备名称
 	 */
 	private String equipmentName;
+
+
+	/**
+	 * 设备编号
+	 */
+
+	private  String   equNo;
 	/**
 	 * 设备类型
 	 */
@@ -125,6 +132,15 @@ public class UseEquipmentVo {
 
 
 	private String unlockCount; //用户和设备未绑定状态
+
+
+	public String getEquNo() {
+		return equNo;
+	}
+
+	public void setEquNo(String equNo) {
+		this.equNo = equNo;
+	}
 
 	public String getUnlockCount() {
 		return unlockCount;

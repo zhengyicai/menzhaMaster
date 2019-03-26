@@ -29,6 +29,14 @@ public class UseEquipmentPo {
 	 * 设备编号
 	 */
 	private String equipmentId;
+
+
+	/**
+	 * 设备编号
+	 */
+	private String equNo;
+
+
 	/**
 	 * 设备名称
 	 */
@@ -93,6 +101,15 @@ public class UseEquipmentPo {
 	 * 序列号
 	 */
 	private String  equId;
+
+
+	public String getEquNo() {
+		return equNo;
+	}
+
+	public void setEquNo(String equNo) {
+		this.equNo = equNo;
+	}
 
 	public String getEquCode() {
 		return equCode;

@@ -9,10 +9,11 @@ package com.qzi.cms.web.controller;
 
 import javax.annotation.Resource;
 
+import com.qzi.cms.common.po.UseResidentCardPo;
+import com.qzi.cms.common.po.UseResidentEquipmentPo;
+import com.qzi.cms.common.util.ToolUtils;
 import com.qzi.cms.common.vo.TreeVo;
-import com.qzi.cms.server.mapper.UseBuildingMapper;
-import com.qzi.cms.server.mapper.UseResidentMapper;
-import com.qzi.cms.server.mapper.UseResidentRoomMapper;
+import com.qzi.cms.server.mapper.*;
 import com.qzi.cms.server.service.common.CommonService;
 import com.qzi.cms.server.service.web.BuildingService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,7 @@ import com.qzi.cms.common.vo.UseResidentRoomVo;
 import com.qzi.cms.common.vo.UseResidentVo;
 import com.qzi.cms.server.service.web.ResidentService;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,6 +60,15 @@ public class ResidentController {
 
 	@Resource
 	private CommonService commonService;
+
+	@Resource
+	private UseResidentCardMapper useResidentCardMapper;
+
+	@Resource
+	private UseEquipmentNowStateMapper useEquipmentNowStateMapper;
+
+	@Resource
+	private UseResidentEquipmentMapper useResidentEquipmentMapper;
 
 
 	@GetMapping("/findCommunitys")
@@ -334,6 +345,77 @@ public class ResidentController {
 		} catch (Exception ex) {
 			respBody.add(RespCodeEnum.ERROR.getCode(), "查找所有住户房间数据失败");
 			LogUtils.error("查找所有住户房间数据失败！",ex);
+		}
+		return respBody;
+	}
+
+
+
+	@GetMapping("/findResidentCount")
+	public RespBody findResidentCount(String residentId){
+		RespBody respBody = new RespBody();
+		try {
+			//保存返回数据
+			respBody.add(RespCodeEnum.SUCCESS.getCode(), "查找用户和设备绑定成功", useResidentEquipmentMapper.findResidentStateCount(residentId));
+		} catch (Exception ex) {
+			respBody.add(RespCodeEnum.ERROR.getCode(), "查找用户和设备绑定失败");
+			LogUtils.error("查找用户和设备绑定失败！",ex);
+		}
+		return respBody;
+	}
+
+
+
+
+	@PostMapping("/addCard")
+	public RespBody addCard(@RequestBody UseResidentCardPo useResidentCardPo){
+		RespBody respBody = new RespBody();
+
+		String[] cardList = useResidentCardPo.getRemark().split(",",-1);
+
+
+		//添加房卡
+		useResidentCardMapper.deleteResidentId(useResidentCardPo.getResidentId());
+		UseResidentCardPo po1 = new UseResidentCardPo();
+		for(int i = 0;i<cardList.length;i++){
+			po1.setId(ToolUtils.getUUID());
+			po1.setCardNo(cardList[i]);
+			po1.setCreateTime(new Date());
+			po1.setResidentId(useResidentCardPo.getResidentId());
+			po1.setRemark("");
+			po1.setState("10");
+			useResidentCardMapper.insert(po1);
+		}
+
+
+
+		//修改所有的设备的状态
+		List<UseResidentEquipmentPo> epo =  useResidentEquipmentMapper.findResidentState(useResidentCardPo.getResidentId());
+		if(epo !=null){
+			for(UseResidentEquipmentPo epo1:epo){
+				useEquipmentNowStateMapper.update("20",epo1.getEquipmentId());
+			}
+		}
+
+
+
+		respBody.add(RespCodeEnum.SUCCESS.getCode(), "房卡添加成功");
+
+
+		return respBody;
+	}
+
+
+
+	@GetMapping("/findCard")
+	public RespBody findCard(String residentId){
+		RespBody respBody = new RespBody();
+		try {
+			//保存返回数据
+			respBody.add(RespCodeEnum.SUCCESS.getCode(), "查找所有住户房卡数据成功", useResidentCardMapper.findResidentIds(residentId));
+		} catch (Exception ex) {
+			respBody.add(RespCodeEnum.ERROR.getCode(), "查找所有住户房卡数据失败");
+			LogUtils.error("查找所有住户房卡数据失败！",ex);
 		}
 		return respBody;
 	}

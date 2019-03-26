@@ -59,6 +59,12 @@ public class EquipmentServiceImpl implements EquipmentService {
 	@Resource
 	private UseUserCardEquipmentMapper useUserCardEquipmentMapper;
 
+	@Resource
+	private UseEquipmentNowStateMapper useEquipmentNowStateMapper;
+
+	@Resource
+	private UseEquipmentPortMapper useEquipmentPortMapper;
+
 	@Override
 	public List<OptionVo> findCommunitys() throws Exception {
 		//读取用户信息
@@ -111,6 +117,12 @@ public class EquipmentServiceImpl implements EquipmentService {
 			equipmentPo.setUnitName(null);
 		}
 
+
+
+
+
+		UseCommunityPo compo =   communityMapper.findOne(equipmentVo.getCommunityId());
+
 		//设置围墙机的数据
 		if("20".equals(equipmentPo.getEquipmentType())){
 			List<UseRoomCardPo> cardList =  useRoomCardMapper.findCommunityId(equipmentPo.getCommunityId());
@@ -158,8 +170,33 @@ public class EquipmentServiceImpl implements EquipmentService {
 
 
 
-
+		equipmentPo.setEquNo(compo.getCommunityNo()+equipmentVo.getEquNo());
 		equipmentMapper.insert(equipmentPo);
+
+		UseEquipmentNowStatePo nowStatePo  = new UseEquipmentNowStatePo();
+		UseEquipmentPortPo portPo = new UseEquipmentPortPo();
+
+
+
+
+		//初始化设备的状态
+		nowStatePo.setId(ToolUtils.getUUID());
+		nowStatePo.setEquipmentId(equIe);
+		nowStatePo.setEquipmentNo(compo.getCommunityNo()+equipmentVo.getEquNo());
+		nowStatePo.setState("20");
+		nowStatePo.setUpdateTime(new Date());
+		useEquipmentNowStateMapper.insert(nowStatePo);
+
+
+
+		//初始化设备的udp端口
+		portPo.setId(ToolUtils.getUUID());
+		portPo.setCreateTime(new Date());
+		portPo.setEquipmentId(equIe);
+		portPo.setEquipmentNo(compo.getCommunityNo()+equipmentVo.getEquNo());
+		portPo.setIps("0.0.0.0");
+		portPo.setPort("8000");
+		useEquipmentPortMapper.insert(portPo);
 
 
 	}

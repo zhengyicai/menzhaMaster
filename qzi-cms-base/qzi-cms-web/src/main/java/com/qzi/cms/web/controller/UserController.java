@@ -11,14 +11,13 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.tools.Tool;
 
-import com.qzi.cms.common.po.UseCommunityUserPo;
-import com.qzi.cms.common.po.UseUserCardEquipmentPo;
-import com.qzi.cms.common.po.UseUserCardPo;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.qzi.cms.common.po.*;
 import com.qzi.cms.common.util.ToolUtils;
+import com.qzi.cms.common.vo.UseResidentVo;
 import com.qzi.cms.common.vo.UseUserCardVo;
-import com.qzi.cms.server.mapper.UseCommunityUserMapper;
-import com.qzi.cms.server.mapper.UseUserCardEquipmentMapper;
-import com.qzi.cms.server.mapper.UseUserCardMapper;
+import com.qzi.cms.server.mapper.*;
 import com.qzi.cms.server.service.web.CommunityService;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +37,10 @@ import com.qzi.cms.common.vo.SysUserVo;
 import com.qzi.cms.common.vo.UpdatePwVo;
 import com.qzi.cms.server.service.web.UserService;
 
+import java.io.IOException;
+import java.net.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户控制器
@@ -69,6 +71,29 @@ public class UserController {
 
 	@Resource
 	private UseUserCardEquipmentMapper useUserCardEquipmentMapper;
+
+
+	@Resource
+	private UseResidentEquipmentMapper useResidentEquipmentMapper;
+
+
+	@Resource
+	private UseEquipmentPortMapper useEquipmentPortMapper;
+
+	@Resource
+	private  UseEquipmentNowStateMapper useEquipmentNowStateMapper;
+
+
+	@Resource
+	private  UseResidentCardMapper useResidentCardMapper;
+
+
+	@Resource
+	private UseResidentUnlockRecordMapper useResidentUnlockRecordMapper;
+
+
+
+
 
 	@GetMapping("/findUser")
 	private RespBody findUser(){
@@ -410,6 +435,32 @@ public class UserController {
 
 
 	/**
+	 * 添加用户设备
+	 * @param
+	 * @return
+	 */
+	@PostMapping("/addResidentEquipment")
+	public RespBody addResidentEquipment(@RequestBody UseUserCardVo useUserCardVo){
+		RespBody respBody = new RespBody();
+
+		if(useUserCardVo.getChoId().length>0){
+
+			UseResidentEquipmentPo useResidentEquipmentPo = new UseResidentEquipmentPo();
+			for(int i  = 0;i<useUserCardVo.getChoId().length;i++){
+				useResidentEquipmentPo.setId(ToolUtils.getUUID());
+				useResidentEquipmentPo.setCommunityId(useUserCardVo.getCommunityId());
+				useResidentEquipmentPo.setState("10");
+				useResidentEquipmentPo.setResidentId(useUserCardVo.getId());
+				useResidentEquipmentPo.setEquipmentId(useUserCardVo.getChoId()[i]);
+				useResidentEquipmentMapper.insert(useResidentEquipmentPo);
+			}
+
+		}
+		return respBody;
+	}
+
+
+	/**
 	 * 查看物业房卡设备列表
 	 * @param
 	 * @return
@@ -426,6 +477,27 @@ public class UserController {
 		}
 		return respBody;
 	}
+
+	/**
+	 * 查看用户设备列表
+	 * @param
+	 * @return
+	 */
+	@GetMapping("/residentEquipmentFindAll")
+	public RespBody residentEquipmentFindAll(String residentId,String communityId){
+		RespBody respBody = new RespBody();
+		try {
+			//保存返回数据
+			respBody.add(RespCodeEnum.SUCCESS.getCode(), "查找所有管理员卡号数据成功", useResidentEquipmentMapper.findResident(residentId,communityId));
+		} catch (Exception ex) {
+			respBody.add(RespCodeEnum.ERROR.getCode(), "查找所有管理员卡号数据失败");
+			LogUtils.error("查找所有用户信息数据失败！",ex);
+		}
+		return respBody;
+	}
+
+
+
 
 
 
@@ -466,6 +538,43 @@ public class UserController {
 
 
 	/**
+	 * 修改用户设备列表
+	 * @param
+	 * @return
+	 */
+	@PostMapping("/updateResidentEquipment")
+	public RespBody updateResidentEquipment(@RequestBody UseUserCardVo useUserCardVo){
+		RespBody respBody = new RespBody();
+
+
+		useResidentEquipmentMapper.deleteResident(useUserCardVo.getId(),useUserCardVo.getCommunityId());
+		if(useUserCardVo.getChoId().length>0){
+
+//
+//			if(useUserCardEquipmentMapper.selectCardId(useUserCardVo.getId())>0){
+//				respBody.add(RespCodeEnum.ERROR.getCode(), "该卡号应该绑定过设备，请先解绑");
+//				return respBody;
+//			}
+
+			//useUserCardEquipmentMapper.deleteCardId(useUserCardVo.getId());
+
+
+			UseResidentEquipmentPo useResidentEquipmentPo = new UseResidentEquipmentPo();
+			for(int i  = 0;i<useUserCardVo.getChoId().length;i++){
+				useResidentEquipmentPo.setId(ToolUtils.getUUID());
+				useResidentEquipmentPo.setCommunityId(useUserCardVo.getCommunityId());
+				useResidentEquipmentPo.setState("10");
+				useResidentEquipmentPo.setResidentId(useUserCardVo.getId());
+				useResidentEquipmentPo.setEquipmentId(useUserCardVo.getChoId()[i]);
+				useResidentEquipmentMapper.insert(useResidentEquipmentPo);
+			}
+
+		}
+		return respBody;
+	}
+
+
+	/**
 	 * 删除物业房卡列表
 	 * @param
 	 * @return
@@ -484,6 +593,235 @@ public class UserController {
 
 		return respBody;
 	}
+
+
+
+
+	//获取设备是否需要同步数据
+//	@GetMapping("/sentPort")
+//	public RespBody sentPort() throws  Exception{
+//		RespBody respBody = new RespBody();
+//		new Thread(new Runnable() {
+//			@Override
+//			public void run() {
+//				while(true){
+//					//建立udp的服务 ，并且要监听一个端口。
+//					DatagramSocket  socket = null;
+//					try {
+//						socket = new DatagramSocket(7000);
+//						byte[] buf = new byte[1024];
+//						DatagramPacket datagramPacket = new DatagramPacket(buf, buf.length); // 1024
+//						//调用udp的服务接收数据
+//						socket.receive(datagramPacket); //receive是一个阻塞型的方法，没有接收到数据包之前会一直等待。 数据实际上就是存储到了byte的自己数组中了。
+//						System.out.println("接收端接收到的数据："+ new String(buf,0,datagramPacket.getLength())); // getLength() 获取数据包存储了几个字节。
+//						System.out.println("接收端接收到的数据："+datagramPacket.getData()); // getLength() 获取数据包存储了几个字节。
+//						System.out.println("receive阻塞了我，哈哈"+datagramPacket.getAddress()+":"+datagramPacket.getPort());
+//
+//						//UseEquipmentPortPo portPo = new UseEquipmentPortPo();
+//						useEquipmentPortMapper.update(String.valueOf(datagramPacket.getAddress()).substring(1,String.valueOf(datagramPacket.getAddress()).length()),datagramPacket.getPort()+"",new String(buf,0,datagramPacket.getLength()));
+//
+//
+//
+//						UseEquipmentNowStatePo nowStatePo =   useEquipmentNowStateMapper.findOne(new String(buf,0,datagramPacket.getLength()));
+//
+//						respBody.add(RespCodeEnum.SUCCESS.getCode(), nowStatePo.getState());
+//
+//
+//
+//						//关闭资源
+//						socket.close();
+//
+//
+//						byte[] bs = nowStatePo.getState().getBytes();//要发的信息内容
+//						//UDPA与UDPB的ip均为本机ip，故设置不同的端口号
+//						InetAddress desIp = InetAddress.getByName(datagramPacket.getAddress().toString().substring(1,datagramPacket.getAddress().toString().length()));
+//
+//						//数据报包，UDPB的端口为10010
+//						DatagramPacket p = new DatagramPacket(bs, bs.length, desIp, datagramPacket.getPort());
+//						//创建数据报套接字，UDPA的端口设置为10086
+//						DatagramSocket socket_A = new DatagramSocket(9999);
+//						//UDPA给UDPB发送数据报
+//						socket_A.send(p);
+//						//关闭socket_A套接字
+//						socket_A.close();
+//
+//					} catch (SocketException e) {
+//						e.printStackTrace();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
+//
+//					//准备空的数据包用于存放数据。
+//
+//				}
+//			}
+//		}).start();
+//
+//
+//
+//		return respBody;
+//
+//
+//	}
+
+
+
+	//获取设备是否需要同步数据
+//	@GetMapping("/sentUnlock")
+//	public RespBody sentUnlock() throws  Exception{
+//		RespBody respBody = new RespBody();
+//		new Thread(new Runnable() {
+//			@Override
+//			public void run() {
+//				while(true){
+//					//建立udp的服务 ，并且要监听一个端口。
+//					DatagramSocket  socket = null;
+//					try {
+//						socket = new DatagramSocket(6000);
+//						byte[] buf = new byte[1024];
+//						DatagramPacket datagramPacket = new DatagramPacket(buf, buf.length); // 1024
+//						//调用udp的服务接收数据
+//
+//						socket.receive(datagramPacket); //receive是一个阻塞型的方法，没有接收到数据包之前会一直等待。 数据实际上就是存储到了byte的自己数组中了。
+//						System.out.println("接收端接收到的数据："+ new String(buf,0,datagramPacket.getLength())); // getLength() 获取数据包存储了几个字节。
+//
+//
+//
+//						UseResidentUnlockRecordPo unlockRecordPo = new UseResidentUnlockRecordPo();
+//						String[] recordList = new String(buf,0,datagramPacket.getLength()).split(",",-1);
+//						unlockRecordPo.setId(ToolUtils.getUUID());
+//						unlockRecordPo.setWxId(recordList[0]);
+//						unlockRecordPo.setEquipmentNo(recordList[1]);
+//						unlockRecordPo.setState("10");
+//						unlockRecordPo.setCreateTime(new Date());
+//						useResidentUnlockRecordMapper.insert(unlockRecordPo);
+//
+//
+//						//关闭资源
+//						socket.close();
+//
+//
+//						byte[] bs = "10".getBytes();//要发的信息内容
+//						//UDPA与UDPB的ip均为本机ip，故设置不同的端口号
+//						InetAddress desIp = InetAddress.getByName(datagramPacket.getAddress().toString().substring(1,datagramPacket.getAddress().toString().length()));
+//
+//						//数据报包，UDPB的端口为10010
+//						DatagramPacket p = new DatagramPacket(bs, bs.length, desIp, datagramPacket.getPort());
+//						//创建数据报套接字，UDPA的端口设置为10086
+//						DatagramSocket socket_A = new DatagramSocket(9999);
+//						//UDPA给UDPB发送数据报
+//						socket_A.send(p);
+//						//关闭socket_A套接字
+//						socket_A.close();
+//
+//					} catch (SocketException e) {
+//						e.printStackTrace();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
+//
+//					//准备空的数据包用于存放数据。
+//
+//				}
+//			}
+//		}).start();
+//
+//
+//
+//		return respBody;
+//
+//
+//	}
+
+
+	/**
+	 * 查询用户
+	 * @param equipmentNo
+	 * @return
+	 * @throws Exception
+	 */
+
+//	@GetMapping("/getResident")
+//	public RespBody getResident(String equipmentNo ) throws  Exception{
+//		RespBody respBody = new RespBody();
+//		List<UseResidentVo> relist =  useResidentEquipmentMapper.findResidentId(equipmentNo);
+//		if(relist!=null){
+//			for(UseResidentVo vo1:relist){
+//				vo1.setCardPos(useResidentCardMapper.findResidentCardNoIds(vo1.getId()));
+//			}
+//		}
+//		respBody.add(RespCodeEnum.SUCCESS.getCode(), "查找所有住户房卡数据成功", relist);
+//		return respBody;
+//
+//
+//	}
+
+
+
+
+//	@GetMapping("/testUdp")
+//	public RespBody testUdp() throws  Exception{
+//		RespBody respBody = new RespBody();
+//		byte[] bs = "我是A,给B发信息".getBytes();//要发的信息内容
+//		//UDPA与UDPB的ip均为本机ip，故设置不同的端口号
+//		InetAddress desIp = InetAddress.getByName("192.168.1.140");
+//
+//		//数据报包，UDPB的端口为10010
+//		DatagramPacket p = new DatagramPacket(bs, bs.length, desIp, 6000);
+//		//创建数据报套接字，UDPA的端口设置为10086
+//		DatagramSocket socket_A = new DatagramSocket(9999);
+//		//UDPA给UDPB发送数据报
+//		socket_A.send(p);
+//		//关闭socket_A套接字
+//		socket_A.close();
+//
+//		new Thread(new Runnable() {
+//			@Override
+//			public void run() {
+//				while(true){
+//					//建立udp的服务 ，并且要监听一个端口。
+//					DatagramSocket  socket = null;
+//					try {
+//						socket = new DatagramSocket(7000);
+//						byte[] buf = new byte[1024];
+//						DatagramPacket datagramPacket = new DatagramPacket(buf, buf.length); // 1024
+//						//调用udp的服务接收数据
+//						socket.receive(datagramPacket); //receive是一个阻塞型的方法，没有接收到数据包之前会一直等待。 数据实际上就是存储到了byte的自己数组中了。
+//						System.out.println("接收端接收到的数据："+ new String(buf,0,datagramPacket.getLength())); // getLength() 获取数据包存储了几个字节。
+//						System.out.println("receive阻塞了我，哈哈"+datagramPacket.getAddress()+":"+datagramPacket.getPort());
+//						//关闭资源
+//						socket.close();
+//
+//
+//						byte[] bs = "ok".getBytes();//要发的信息内容
+//						//UDPA与UDPB的ip均为本机ip，故设置不同的端口号
+//						InetAddress desIp = InetAddress.getByName(datagramPacket.getAddress().toString().substring(1,datagramPacket.getAddress().toString().length()));
+//
+//						//数据报包，UDPB的端口为10010
+//						DatagramPacket p = new DatagramPacket(bs, bs.length, desIp, datagramPacket.getPort());
+//						//创建数据报套接字，UDPA的端口设置为10086
+//						DatagramSocket socket_A = new DatagramSocket(9999);
+//						//UDPA给UDPB发送数据报
+//						socket_A.send(p);
+//						//关闭socket_A套接字
+//						socket_A.close();
+//
+//					} catch (SocketException e) {
+//						e.printStackTrace();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
+//
+//					//准备空的数据包用于存放数据。
+//
+//				}
+//			}
+//		}).start();
+//
+//		respBody.add(RespCodeEnum.SUCCESS.getCode(), "推送成功");
+//
+//		return respBody;
+//	}
 
 
 

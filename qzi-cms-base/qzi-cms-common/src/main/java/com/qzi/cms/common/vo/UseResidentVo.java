@@ -7,7 +7,11 @@
 */
 package com.qzi.cms.common.vo;
 
+import com.qzi.cms.common.po.UseResidentCardPo;
+
+import javax.xml.crypto.Data;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 住户信息VO类
@@ -92,6 +96,129 @@ public class UseResidentVo {
 	 * 是否默认小区
 	 */
 	private String  isTrue;
+
+
+
+	/**
+	 * 微信
+	 */
+	private String wxId;
+	/**
+	 * 人脸识别
+	 */
+	private String imgUrl;
+	/**
+	 * 指纹id
+	 */
+	private String fingerUrl;
+
+	/**
+	 * 身份证id
+	 */
+	private String identityId;
+
+	/**
+	 * 身份证No
+	 */
+	private String identityNo;
+
+
+	/**
+	 * 生效时间
+	 */
+	private Date lastTime;
+
+	/**
+	 * 访客类型
+	 */
+	private String residentType;
+
+
+	private  String equipmentNo;
+
+	private String cmd;
+
+	public String getEquipmentNo() {
+		return equipmentNo;
+	}
+
+	public void setEquipmentNo(String equipmentNo) {
+		this.equipmentNo = equipmentNo;
+	}
+
+	public String getCmd() {
+		return cmd;
+	}
+
+	public void setCmd(String cmd) {
+		this.cmd = cmd;
+	}
+
+	private List<String> cardPos;
+
+	public List<String> getCardPos() {
+		return cardPos;
+	}
+
+	public void setCardPos(List<String> cardPos) {
+		this.cardPos = cardPos;
+	}
+
+	public String getResidentType() {
+		return residentType;
+	}
+
+	public void setResidentType(String residentType) {
+		this.residentType = residentType;
+	}
+
+	public Date getLastTime() {
+		return lastTime;
+	}
+
+	public void setLastTime(Date lastTime) {
+		this.lastTime = lastTime;
+	}
+
+	public String getWxId() {
+		return wxId;
+	}
+
+	public void setWxId(String wxId) {
+		this.wxId = wxId;
+	}
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
+
+	public String getFingerUrl() {
+		return fingerUrl;
+	}
+
+	public void setFingerUrl(String fingerUrl) {
+		this.fingerUrl = fingerUrl;
+	}
+
+	public String getIdentityId() {
+		return identityId;
+	}
+
+	public void setIdentityId(String identityId) {
+		this.identityId = identityId;
+	}
+
+	public String getIdentityNo() {
+		return identityNo;
+	}
+
+	public void setIdentityNo(String identityNo) {
+		this.identityNo = identityNo;
+	}
 
 	public String getIsTrue() {
 		return isTrue;

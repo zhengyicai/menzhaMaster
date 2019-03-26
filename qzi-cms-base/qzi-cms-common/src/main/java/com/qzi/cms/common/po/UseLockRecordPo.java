@@ -30,6 +30,15 @@ public class UseLockRecordPo {
 
     private String state;
 
+    private String equipmentId;
+
+    public String getEquipmentId() {
+        return equipmentId;
+    }
+
+    public void setEquipmentId(String equipmentId) {
+        this.equipmentId = equipmentId;
+    }
 
     public String getId() {
         return id;
