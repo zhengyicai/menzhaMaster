@@ -133,6 +133,15 @@ public class UseEquipmentVo {
 
 	private String unlockCount; //用户和设备未绑定状态
 
+	private  Integer  lastTime;
+
+	public Integer getLastTime() {
+		return lastTime;
+	}
+
+	public void setLastTime(Integer lastTime) {
+		this.lastTime = lastTime;
+	}
 
 	public String getEquNo() {
 		return equNo;

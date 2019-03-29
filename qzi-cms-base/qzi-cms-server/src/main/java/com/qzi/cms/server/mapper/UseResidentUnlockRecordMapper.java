@@ -29,4 +29,11 @@ public interface UseResidentUnlockRecordMapper extends BaseMapper<UseResidentUnl
 	@Select("select * from use_resident_unlockRecord where wxid = #{wxId}")
 	public List<UseResidentUnlockRecordVo> findAll(@Param("wxId") String wxId);
 
+	@Select("select * from use_resident_unlockRecord where deviceId = #{deviceId} limit 1")
+	public UseResidentUnlockRecordPo deviceId(@Param("deviceId") String deviceId);
+
+
+
+
+
 }

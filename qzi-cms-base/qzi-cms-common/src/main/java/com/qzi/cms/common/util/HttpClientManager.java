@@ -1,6 +1,9 @@
 package com.qzi.cms.common.util;
 
 
+import com.alibaba.fastjson.JSON;
+import com.qzi.cms.common.vo.UseResidentVo;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,6 +60,7 @@ public class HttpClientManager {
         // 30
         OutputStream os = http.getOutputStream();
         os.write(data.getBytes("UTF-8"));// 传入参数
+
         os.flush();
         os.close();
         // 一旦发送成功，用以下方法就可以得到服务器的回应：

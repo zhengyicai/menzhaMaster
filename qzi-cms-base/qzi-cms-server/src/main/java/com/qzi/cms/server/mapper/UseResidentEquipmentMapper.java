@@ -10,6 +10,7 @@ package com.qzi.cms.server.mapper;
 import com.qzi.cms.common.po.UseEquipmentPo;
 import com.qzi.cms.common.po.UseResidentEquipmentPo;
 import com.qzi.cms.common.po.UseResidentRoomPo;
+import com.qzi.cms.common.vo.UseEquipmentVo;
 import com.qzi.cms.common.vo.UseResidentRoomVo;
 import com.qzi.cms.common.vo.UseResidentVo;
 import com.qzi.cms.server.base.BaseMapper;
@@ -52,8 +53,8 @@ public interface UseResidentEquipmentMapper extends BaseMapper<UseResidentEquipm
 
 
 
-	@Select("select * from use_equipment where id in  (select equipmentId from use_resident_equipment where residentId = (select id  from use_resident where wxid=#{wxid}))")
-	public List<UseEquipmentPo> findWxId(@Param("wxid") String wxid);
+	@Select("select e.*,TIMESTAMPDIFF(SECOND,p.createTime,now()) as lastTime from use_equipment e left join use_equipment_port p on e.equNo = p.equipmentNo  where e.id in  (select equipmentId from use_resident_equipment where residentId = (select id  from use_resident where wxid=#{wxid})) ")
+	public List<UseEquipmentVo> findWxId(@Param("wxid") String wxid);
 
 
 

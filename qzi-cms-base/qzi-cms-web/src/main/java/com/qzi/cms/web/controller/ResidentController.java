@@ -16,6 +16,7 @@ import com.qzi.cms.common.vo.TreeVo;
 import com.qzi.cms.server.mapper.*;
 import com.qzi.cms.server.service.common.CommonService;
 import com.qzi.cms.server.service.web.BuildingService;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -71,6 +72,12 @@ public class ResidentController {
 	private UseResidentEquipmentMapper useResidentEquipmentMapper;
 
 
+	@Resource
+	private UseUnlockEquRecordMapper useUnlockEquRecordMapper;
+
+
+
+
 	@GetMapping("/findCommunitys")
 	public RespBody findCommunitys(){
 		RespBody respBody = new RespBody();
@@ -123,6 +130,26 @@ public class ResidentController {
 		}
 		return respBody;
 	}
+
+
+	@GetMapping("/useEquRecord")
+	public RespBody useEquRecord(Paging paging,String communityId){
+		RespBody respBody = new RespBody();
+		try {
+			//保存返回数据
+			RowBounds rwoBounds = new RowBounds(paging.getPageNumber(),paging.getPageSize());
+
+			respBody.add(RespCodeEnum.SUCCESS.getCode(), "查找所有开锁数据成功", useUnlockEquRecordMapper.findAll(rwoBounds,communityId));
+			//保存分页对象
+			paging.setTotalCount(useUnlockEquRecordMapper.findcound(communityId));
+			respBody.setPage(paging);
+		} catch (Exception ex) {
+			respBody.add(RespCodeEnum.ERROR.getCode(), "查找所有开锁数据失败");
+			LogUtils.error("查找所有开锁数据失败！",ex);
+		}
+		return respBody;
+	}
+
 
 
 	@GetMapping("/authListDetail")

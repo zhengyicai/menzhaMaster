@@ -9,7 +9,7 @@ public class UseEquipmentNowStateVo {
     private String equipmentNo;
 
     private String state;
-    private String cms;
+    private String cmd;
 
     public String getEquipmentNo() {
         return equipmentNo;
@@ -27,11 +27,11 @@ public class UseEquipmentNowStateVo {
         this.state = state;
     }
 
-    public String getCms() {
-        return cms;
+    public String getCmd() {
+        return cmd;
     }
 
-    public void setCms(String cms) {
-        this.cms = cms;
+    public void setCmd(String cmd) {
+        this.cmd = cmd;
     }
 }

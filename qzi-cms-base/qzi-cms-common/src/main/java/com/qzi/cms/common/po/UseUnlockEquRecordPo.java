@@ -5,33 +5,20 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * 用户开锁记录
- * Created by Administrator on 2019/3/24.
+ * 用户设备开锁记录
+ * Created by Administrator on 2019/3/27.
  */
 
-@Table(name="use_resident_unlockRecord")
-public class UseResidentUnlockRecordPo {
-
+@Table(name="use_unlock_equRecord")
+public class UseUnlockEquRecordPo {
     @Id
-    private String id;
-
+    private String  id;
     private String wxId;
-
     private String equipmentNo;
-
-    private String state;
-
+    private String imgUrl;
     private Date createTime;
-
-    private String deviceId;
-
-    public String getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
+    private String  state;
+    private  String remark;
 
     public String getId() {
         return id;
@@ -57,12 +44,12 @@ public class UseResidentUnlockRecordPo {
         this.equipmentNo = equipmentNo;
     }
 
-    public String getState() {
-        return state;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     public Date getCreateTime() {
@@ -71,5 +58,21 @@ public class UseResidentUnlockRecordPo {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

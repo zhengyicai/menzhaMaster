@@ -138,6 +138,17 @@ public class UseResidentVo {
 
 	private String cmd;
 
+	private String deviceId;
+
+
+	public String getDeviceId() {
+		return deviceId;
+	}
+
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
+	}
+
 	public String getEquipmentNo() {
 		return equipmentNo;
 	}

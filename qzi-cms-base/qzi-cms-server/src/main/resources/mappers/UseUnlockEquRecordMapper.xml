@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qzi.cms.server.mapper.UseUnlockEquRecordMapper">
+   <!-- 条件分页查询 -->
+	<select id="findAll" resultType="UseResidentVo" parameterType="String">
+		select r.*,u.mobile,u.name,e.communityId as communityId,c.communityName from use_unlock_equRecord r left join use_resident u on u.wxId = r.wxId left join use_equipment e on e.equno =r.equipmentNo  left join use_community c on c.id = communityId
+		<where>
+			1=1
+			<if test="communityId != null and communityId !=''">
+			 and	communityId =#{communityId}
+			</if>
+		</where>
+		order by createTime desc
+	</select>
+   
+	<select id="findcound" resultType="Integer" parameterType="String">
+		select count(1) from use_unlock_equRecord r left join use_resident u on u.wxId = r.wxId left join use_equipment e on e.equno =r.equipmentNo  left join use_community c on c.id = communityId
+		<where>
+			1=1
+			<if test="communityId != null and communityId !=''">
+			and	communityId =#{communityId}
+			</if>
+		</where>
+	</select>
+
+
+
+</mapper>
